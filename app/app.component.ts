@@ -1,9 +1,9 @@
 
 import { Component } from '@angular/core';
 import { Product } from './product';
+import { ProductService } from './product.service';
 
-products: Product[];
-
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'my-app',
@@ -65,12 +65,23 @@ products: Product[];
     border-radius: 4px 0 0 4px;
   }
 `]
+  , providers: [ProductService]
 
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
+  constructor(private productService: ProductService) {
+
+  }
   selectedProduct: Product;
+  products: Product[];
   title = 'Tour of Products';
-  products = PRODUCTS;
+  getProducts(): void {
+    this.productService.getProducts().then(products => this.products = products);
+  }
+  ngOnInit(): void {
+    this.getProducts();
+  }
   onSelect(product: Product): void {
     this.selectedProduct = product;
   }
